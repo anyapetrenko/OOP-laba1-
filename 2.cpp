@@ -1,386 +1,238 @@
-#include <iostream>
-#include <vector>
-#include <fstream>
-//#include <windows.h>
-#include <string>
-
-using namespace std;
-class CharacterDirectory {
-public:
-    string name, surname;
-    string alias;
-    string mentionedIn;
-    int dayOfBirth, monthOfBirth, yearOfBirth;
-    int role;
-    int id;
-
-    void read() {
-        cout << "  Имя: ";
-        std::cin.ignore();
-        std::getline(std::cin, name);
-        cout << "  Фамилия: ";
-        std::getline(std::cin, surname);
-        cout << "  Позывной: ";
-        std::getline(std::cin, alias);
-        cout << "  Персонаж появляется в книгах: ";
-        std::getline(std::cin, mentionedIn);
-        cout << "  Роль (1 - Главная, 2 - Второстепенная, 3 - Эпизодическая: ";
-        cin >> role;
-    }
-
-    void print() {
-        cout << "  Имя: " << name << endl;
-        cout << "  Фамилия: " << surname << endl;
-        cout << "  Позывной: " << alias << endl;
-        cout << "  Персонаж появляется в книгах: " << mentionedIn << endl;
-        cout << "  Роль: " << role << endl;
-    }
-
-    void readBooksMentionedIn() {
-        cout << "  Персонаж появляется в книгах: ";
-        cin >> mentionedIn;
-    }
-
-    void readRole() {
-        cout << "  Роль: ";
-        cin >> role;
+system("cls");
     }
 };
 
-class BooksDirectory {
+class DataBase {
 public:
-    string name, author;
-    string description;
-    int dayOfRelease, monthOfRelease, yearOfRelease;
-    int numberOfPages;
-    int id;
+    UserBase users;
+    NetworkBase networks;
 
-    void read() {
-        cout << "  Название книги: ";
-        std::cin.ignore();
-        std::getline(std::cin, name);
-        cout << "  Автор: ";
-        std::getline(std::cin, author);
-        cout << "  Короткое описание: ";
-        std::getline(std::cin, description);
-        cout << "  Дата выхода (день, месяц, год): ";
-        cin >> dayOfRelease >> monthOfRelease >> yearOfRelease;
-        cout << "  Количество страниц: ";
-        cin >> numberOfPages;
+    DataBase(){}
+    ~DataBase(){}
+
+    void ModeMenu(int& act) {
+        cout << "Выберите режим: " << endl
+            << "(0) Выход" << endl
+            << "(1) Пользователи" << endl
+            << "(2) Соц Сети" << endl
+            << "(3) Определить соц сеть у пользователя" << endl
+            << "Ваш выбор: ";
+        cin >> act;
+
+        system("cls");
     }
 
-    void print() {
-        cout << "  Название книги: " << name << endl;
-        cout << "  Автор: " << author << endl;
-        cout << "  Короткое описание: " << description << endl;
-        cout << "  Дата выхода (день, месяц, год): " << dayOfRelease << ' ' << monthOfRelease << ' ' << yearOfRelease << endl;
-        cout << "  Количество страниц: " << numberOfPages << endl;
-    }
-
-    void readDescription() {
-        cout << "  Описание: ";
-        cin >> description;
-    }
-    void readNumberOfPages() {
-        cout << "  Количество страниц: ";
-        cin >> numberOfPages;
-    }
-};
-
-class CharacterBase {
-public:
-    int id = 1;
-    vector<CharacterDirectory> data;
-
-    void add() {
-        CharacterDirectory temp;
-        temp.read();
-        temp.id = id++;
-        cout << "  Индекс: " << temp.id << endl;
-        data.push_back(temp);
-    }
-
-    int search(int id) {
-        for (int i = 0; i < data.size(); i++)
-            if (data[i].id == id)
-                return i;
-
-        return -1;
-    }
-
-    void remove(int pos) {
-        data.erase(data.begin() + pos);
-    }
-
-    void open(const string& filename)
-    {
-        fstream ifs;
-        ifs.open(filename, fstream::in | fstream::binary);
-        if (ifs.fail())
+    void Identify() {
+        if (users.IsEmpty() || networks.IsEmpty()) {
+            cout << "Данные отсутствуют!" << endl;
             return;
-        while (ifs.peek() != -1)
-        {
-            CharacterDirectory character;
-            std::getline(ifs, character.name);
-            std::getline(ifs, character.surname);
-            std::getline(ifs, character.alias);
-            std::getline(ifs, character.mentionedIn);
-            ifs.read((char*)&character.role, sizeof(character.role));
-            //user.print();
-            character.id = id++;
-            data.push_back(character);
         }
-    }
 
-    void save(const string& filename)
-    {
-        fstream ofs;
-        ofs.open(filename, fstream::out | fstream::binary);
-        for (unsigned int i = 0; i < data.size(); ++i)
-        {
-            ofs << data[i].name << '\n';
-            ofs << data[i].surname << '\n';
-            ofs << data[i].alias << '\n';
-            ofs << data[i].mentionedIn << '\n';
-            ofs.write((char*)&data[i].role, sizeof(data[i].role));
+        int idNetwork = -1;
+        int id;
+        cout << "Укажите ID пользователя: ";
+        cin >> id;
+
+        system("cls");
+
+        // Чтение данных о пользователях
+        string fnameUsers = users.FileName("");
+        int countUsers = users.Count();
+
+        UserDirectory dataUser;
+        DataOfUser buf;
+        ifstream loadUsers(fnameUsers, ios::binary | ios::in);
+        bool found = false;
+
+        // Если файл не открылся
+        if (!loadUsers) {
+            cout << "Ошибка открытия файла класса UserBase!" << endl;
+            return;
         }
-    }
-};
 
-class BookBase {
-public:
-    int id = 1;
-    vector<BooksDirectory> data;
+        // Поэлементное чтение и вывод
+        for (int i = 0; i < countUsers; i++)
+        {
+            loadUsers.read((char*)&buf, sizeof(DataOfUser));
 
-    void add() {
-        BooksDirectory temp;
-        temp.read();
-        temp.id = id++;
-        cout << "  Индекс: " << temp.id << endl;
-        data.push_back(temp);
-    }
+            if (id == buf.id) {
+                idNetwork = buf.idNetwork;
 
-    int search(int id) {
-        for (int i = 0; i < data.size(); i++) {
-            if (data[i].id == id) {
-                return i;
+                cout << "*** Данные пользователя ***" << endl;
+                dataUser.SetData(buf);
+                dataUser.Print();
+
+                break;
             }
         }
+        loadUsers.close();
 
-        return -1;
-    }
+        if (idNetwork == -1)
+            cout << "Совпадений не найдено!" << endl;
 
-    void remove(int pos) {
-        data.erase(data.begin() + pos);
-    }
+        // Чтения данных о соц сетях
+        string fnameNetwork = networks.FileName("");
+        int countNetwork = networks.Count();
 
-    void open(const string& filename)
-    {
-        fstream ifs;
-        ifs.open(filename, fstream::in | fstream::binary);
-        if (ifs.fail())
+        NetworkDirectory dataNetwork;
+        DataOfNetwork bufN;
+
+        ifstream load(fnameNetwork, ios::binary | ios::in);
+
+        // Если файл не открылся
+        if (!load) {
+            cout << "Ошибка открытия файла класса NetworkBase!" << endl;
             return;
-        while (ifs.peek() != -1)
-        {
-            BooksDirectory book;
-            std::getline(ifs, book.name);
-            std::getline(ifs, book.author);
-            std::getline(ifs, book.description);
-            ifs.read((char*)&book.dayOfRelease, sizeof(book.dayOfRelease));
-            ifs.read((char*)&book.monthOfRelease, sizeof(book.monthOfRelease));
-            ifs.read((char*)&book.yearOfRelease, sizeof(book.yearOfRelease));
-            ifs.read((char*)&book.numberOfPages, sizeof(book.numberOfPages));
-            book.id = id++;
-            data.push_back(book);
-
         }
-    }
 
-    void save(const string& filename)
-    {
-        fstream of;
-        of.open(filename, fstream::out | fstream::binary);
-        for (unsigned int i = 0; i < data.size(); ++i)
+        // Поэлементное чтение и вывод
+        for (int i = 0; i < countNetwork; i++)
         {
-            of << data[i].name << '\n';
-            of << data[i].author << '\n';
-            of << data[i].description << '\n';
-            of.write((char*)&data[i].dayOfRelease, sizeof(data[i].dayOfRelease));
-            of.write((char*)&data[i].monthOfRelease, sizeof(data[i].monthOfRelease));
-            of.write((char*)&data[i].yearOfRelease, sizeof(data[i].yearOfRelease));
-            of.write((char*)&data[i].numberOfPages, sizeof(data[i].numberOfPages));
+            load.read((char*)&bufN, sizeof(DataOfNetwork));
+
+            if (idNetwork == bufN.id) {
+                cout << "\n*** Данные о соц сети ***" << endl;
+                dataNetwork.SetData(bufN);
+                dataNetwork.Print();
+                found = true;
+                break;
+            }
         }
+        load.close();
+
+        if (!found)
+            cout << "Совпадений не найдено!" << endl;
     }
-};
-
-class CharacterInBookBase
-{
-public:
-    vector<pair<int, int>> data;
-
-    void addUserToNetwork(int character, int book)
-    {
-        data.push_back(make_pair(character, book));
-    }
-
-    void removeCharacter();
-
-    void removeBook();
 };
 
 int main() {
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(1251);
+   // SetConsoleOutputCP(1251);
 
-    setlocale(LC_ALL, "Russian");
-    const string charDir = "Персонажи.dat";
-    const string booksDir = "Книги.dat";
-    const string connection = "Связь.txt";
+    DataBase db;
+    int act = 0;
+    int mode = 0;
+    string fname;
 
-    BookBase book_base;
-    CharacterBase char_base;
-    BookBase book_char_connection;
+    do {
+        db.ModeMenu(mode);
 
-    book_char_connection.open(connection);
-    book_base.open(booksDir);
-    char_base.open(charDir);
+        switch (mode)
+        {
+        case 0:
+            break;
 
-    int choice, option;
-    bool exit = false;
+        case 1:
+            do {
+                db.users.Menu(act);
 
-    while (true) {
-        cout << " Выберите операцию для выполнения:" << endl;
-        cout << " ~~~ I. Добавить персонажа  II. Добавить книгу \n ~~~ III. Редактировать книгу  IV. Редактировать персонажа \n ~~~ V. Удалить книгу  VI. Удалить персонажа \n ~~~ VII. Найти книгу  VIII. Найти персонажа \n ~~~ IX. Связь персонажа с книгой \n ~~~ X. Выход с программы " << endl;
-        cout << " \nОперация: "; cin >> choice;
+                switch (act)
+                {
+                case 0:
+                    break;
 
-        switch (choice) {
-            case 1: {
-                char_base.add();
-                break;
-            }
-            case 2: {
-                book_base.add();
-                break;
-            }
-            case 3: {
-                cout << " Что именно вы хотите отредактировать?" << endl;
-                cout << " (1) Описание (2) Количество страниц" << endl;
-                cout << "Операция: "; cin >> option;
+                case 1:
+                    db.users.Print();
+                    break;
 
-                switch (option) {
-                    case 1: {
-                        int id;
-                        cout << " Индекс книги: "; cin >> id;
-                        int pos = book_base.search(id);
+                case 2:
+                    db.users.Add();
+                    break;
 
-                        if (pos != -1) {
-                            book_base.data[pos].readDescription();
-                            cout << "Информация обновлена." << endl;
-                        }
-                        else
-                            cout << "Книги с таким индексом не существует." << endl;
+                case 3:
+                    db.users.Edit();
+                    break;
 
-                        break;
-                    }
-                    case 2: {
-                        int id;
-                        cout << " Индекс книги: "; cin >> id;
-                        int pos = book_base.search(id);
+                case 4:
+                    db.users.Del();
+                    break;
 
-                        if (pos != -1)
-                            book_base.data[pos].readNumberOfPages();
-                        else
-                            cout << "Книги с таким индексом не существует." << endl;
+                case 5:
+                    db.users.Search();
+                    break;
 
-                        break;
-                    }
+                case 6:
+                    db.users.Clear();
+                    break;
+
+                case 7:
+                    cout << "Укажите имя файла: ";
+                    cin >> fname;
+                    db.users.FileName(fname);
+                    break;
+
+                default:
+                    cout << "Неверный выбор!" << endl;
+                    break;
                 }
-                break;
-            }
-            case 4: {
-                //
-                //
-            }
-                break;
-            case 5: {
-                int id;
-                cout << " Индекс книги: "; cin >> id;
-                int pos = book_base.search(id);
 
-                if (pos != -1)
-                    book_base.remove(pos);
-                else
-                    cout << "Книги с таким индексом не существует." << endl;
-                break;
-            }
-            case 6: { // удаление пользователя и аккаунтов
-                int id;
-                cout << " Индекс персонажа: "; cin >> id;
-                int pos = char_base.search(id);
-                if (pos != -1)
-                    char_base.remove(pos);
-                else
-                    cout << "Книги с таким индексом не существует." << endl;
-                break;
-            }
-            case 7: {
-                int id;
-                cout << " Индекс книги: "; cin >> id;
-                int pos = book_base.search(id);
+system("pause");
+                system("cls");
+            } while (act != 0);
+            act = -1; // значение, которое не проверяется
+            break;
 
-                if (pos != -1)
-                    book_base.data[pos].print();
-                else
-                    cout << "Книги с таким индексом не существует." << endl;
-                break;
-            }
-            case 8: {
-                int id;
-                cout << " Индекс персонажа:"; cin >> id;
-                int pos = char_base.search(id);
-                if (pos != -1)
-                    char_base.data[pos].print();
-                else
-                    cout << "Персонажа с таким индексом не существует." << endl;
-                break;
-            }
-            case 9: {
-                int book_id;
-                int char_id;
-                cout << " Индекс книги: "; cin >> book_id;
-                int pos_book = book_base.search(book_id);
-                cout << " Индекс персонажа:  "; cin >> char_id;
-                int pos_char = char_base.search(char_id);
-                if (pos_book != -1 && pos_char != -1) {
+        case 2:
+            do {
+                db.networks.Menu(act);
 
-                    cout << "Связь была установлена." << endl;
-                    fstream bookBase;
-                    bookBase.open(connection, fstream::in | fstream::out | fstream::app);
-                    bookBase << "  В книге с индексом " << book_id << " появляется персонаж с индексом " << char_id << endl;
-                    bookBase.close();
-                    cout << "  В книге с индексом " << book_id << " появляется персонаж с индексом " << char_id << endl;
-                    book_base.data[pos_book].print();
-                    cout << "-------------------------------------------------------------------" << endl;
-                    char_base.data[pos_char].print();
+                switch (act)
+                {
+                case 0:
+                    break;
 
+                case 1:
+                    db.networks.Print();
+                    break;
+
+                case 2:
+                    db.networks.Add();
+                    break;
+
+                case 3:
+                    db.networks.Edit();
+                    break;
+
+                case 4:
+                    db.networks.Del();
+                    break;
+
+                case 5:
+                    db.networks.Search();
+                    break;
+
+                case 6:
+                    db.networks.Clear();
+                    break;
+
+                case 7:
+                    cout << "Укажите имя файла: ";
+                    cin >> fname;
+                    db.users.FileName(fname);
+                    break;
+
+                default:
+                    cout << "Неверный выбор!" << endl;
+                    break;
                 }
-                else
-                    cout << "Нет персонажа или книги с таким индексом" << endl;
-                break;
-            }
 
-            case 10:
-                exit = true;
-                break;
-            default:
-                exit = true;
-        }
+                system("pause");
+                system("cls");
+            } while (act != 0);
+            act = -1; // значение, которое не проверяется
+            break;
 
-        if (exit) {
+        case 3:
+            db.Identify();
+            break;
+
+        default:
+            cout << "Неверный выбор!" << endl;
             break;
         }
 
-        cout << endl;
-    }
-    book_base.save(booksDir);
-    char_base.save(charDir);
-    return 0;
+        system("pause");
+        system("cls");
+    } while (mode != 0);
 }
