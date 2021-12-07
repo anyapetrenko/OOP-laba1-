@@ -1,4 +1,5 @@
-# OOP-laba1-
+# OOP-labs
+LABA 1:
 Project 1:
 
 The program can perform actions such as:
@@ -31,5 +32,14 @@ Project 3:
 The parser program allows user to simplify rational expressions and calculate the result.
 It can also correctly prioritize parentheses and calculate trigonometric functions.
 
-Laba 2 "laba"
+LABA "laba"
 Qt Timer
+*Timer filters
+*Sorted by time
+*Different format
+*Remembers all timers after closing
+* Button don't disturb
+
+LABA 3 & project
+Report for my phoject: https://docs.google.com/document/d/1YnTnrB8NiPwhXi_MqYyoDLMxEZv1q4eQx1yjkCyguqQ/edit
+
