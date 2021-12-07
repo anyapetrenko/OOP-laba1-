@@ -2,7 +2,6 @@
 #include <iostream>
 #include <windows.h>
 #include <ctime>
-#include <time.h>
 
 using namespace std;
 
