@@ -30,3 +30,6 @@ Project 3:
 
 The parser program allows user to simplify rational expressions and calculate the result.
 It can also correctly prioritize parentheses and calculate trigonometric functions.
+
+Laba 2 "laba"
+Qt Timer
