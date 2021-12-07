@@ -1,6 +1,5 @@
 #include <string>
 #include <iostream>
-#include <windows.h>
 #include <ctime>
 
 using namespace std;
@@ -20,8 +19,8 @@ void delTree(TNode*& root);
 void showTree(TNode* root);
 void Read(TNode* root);
 
-void task6(TNode*& root);
-void task7(TNode*& root);
+void t6(TNode*& root);
+void t7(TNode*& root);
 
 void initTree(TNode*& root, int cntEl)
 {
@@ -145,7 +144,7 @@ void Read(TNode* root)
     }
 }
 
-void task6(TNode*& root)
+void t6(TNode*& root)
 {
     if (root == NULL)
     {
@@ -161,7 +160,7 @@ void task6(TNode*& root)
     task6(root->right);
 }
 
-void task7(TNode*& root)
+void t7(TNode*& root)
 {
     if (root == NULL)
     {
@@ -249,7 +248,7 @@ int main(int argc, char* argv[])
                 cout << "\nК изменениям\n";
                 showTree(root);
                 cout << "\n";
-                task6(root);
+                t6(root);
                 cout << "\nПосле:\n";
                 showTree(root);
                 cout << "\n";
@@ -258,7 +257,7 @@ int main(int argc, char* argv[])
             case '7':
             {
                 cout << "\n";
-                task7(root);
+                t7(root);
                 cout << "\n";
             }
                 break;
