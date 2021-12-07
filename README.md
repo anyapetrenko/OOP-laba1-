@@ -13,17 +13,6 @@ The program can perform actions such as:
 
 Project 2:
 
-The "Books" database includes two tables: characters, books. 
-It allows the user to:
-1. Add a book
-2. Add a character
-3. Associate a book with a character by key (ID)
-4. Edit book information
-5. Edit character information
-6. Delete the book (if the character is attached to this book, then the connection is broken)
-7. Вelete character
-8. Display the entered information about books and characters
-
 
 
 
