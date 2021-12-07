@@ -12,9 +12,12 @@ The program can perform actions such as:
 7. Display nodes, with a paired sum of descendants 
 
 Project 2:
-
-
-
+Database "Social networks"
++ ADD SOCIAL NETWORKS AND USERS INTO DB
++ DB IS MADE BY USING TXT FILES
++ ADD OR REMOVE NETWORKS AND USERS
++ MAKE CONNECTION BETWEEN USERS AND THEIR NETWORKS
++ EDITING OF ANY ADDED INFORMATION
 
 Project 3:
 
