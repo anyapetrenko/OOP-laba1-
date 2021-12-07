@@ -38,8 +38,10 @@ Qt Timer
 *Sorted by time
 *Different format
 *Remembers all timers after closing
-* Button don't disturb
+*Button don't disturb
 
 LABA 3 & project
+Object_detection_project
+Cascade
 Report for my phoject: https://docs.google.com/document/d/1YnTnrB8NiPwhXi_MqYyoDLMxEZv1q4eQx1yjkCyguqQ/edit
 
