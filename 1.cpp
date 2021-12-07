@@ -18,7 +18,7 @@ void findInTree(int key, TNode* root, TNode*& findNode);
 void getMaxMin(TNode* root, int& max, int& min);
 void delTree(TNode*& root);
 void showTree(TNode* root);
-void PBDSP(TNode* root);
+void Read(TNode* root);
 
 void task6(TNode*& root);
 void task7(TNode*& root);
@@ -135,7 +135,7 @@ void showTree(TNode* root)
     tab--;
 }
 
-void PBDSP(TNode* root)
+void Read(TNode* root)
 {
     if (root != NULL)
     {
@@ -183,8 +183,6 @@ TNode* root;
 int main(int argc, char* argv[])
 {
     setlocale(LC_ALL, "Rus");
-    //SetConsoleCP(1251);
-   // SetConsoleOutputCP(1251);
     root = NULL;
     char ch;
     do {
@@ -242,7 +240,7 @@ int main(int argc, char* argv[])
             case '5':
             {
                 cout << "\n";
-                PBDSP(root);
+                Read(root);
                 cout << "\n";
             }
                 break;
@@ -265,6 +263,5 @@ int main(int argc, char* argv[])
             }
                 break;
         }
-        //system("pause");
     } while (true);
 }
