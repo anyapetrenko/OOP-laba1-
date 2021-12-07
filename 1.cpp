@@ -1,8 +1,6 @@
-//#ifndef TYPES_H
-//#define TYPES_H
 #include <string>
 #include <iostream>
-//#include <windows.h>
+#include <windows.h>
 #include <ctime>
 #include <time.h>
 
@@ -13,7 +11,7 @@ typedef struct node
     int inf;
     node* left, * right;
 } TNode;
-//#endif // TYPES_H
+
 
 void initTree(TNode*& root, int cntEl);
 void insTree(TNode*& root, TNode* elem);
